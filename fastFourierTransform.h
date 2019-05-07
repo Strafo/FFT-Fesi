@@ -20,7 +20,4 @@ class Fft_Manager
 };
 
 
-
-
-
 #endif

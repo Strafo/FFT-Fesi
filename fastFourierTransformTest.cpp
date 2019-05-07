@@ -2,8 +2,8 @@
 #include <complex>
 #include <valarray>
 #include "fastFourierTransform.h"
-#include "minunit.h"
-#define PRINT_TEST 1
+#include <minunit.h>
+#define PRINT_TEST
 
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> CArray;
@@ -59,6 +59,7 @@ int main(){
     *stdout=*nul;
     setvbuf( stdout, NULL, _IONBF, 0 );
 #endif
+    cout<<"TEST:"<<endl;
     MU_RUN_TEST(fast_fourier_transform_test_suite);
     MU_REPORT();
     return minunit_status;
