@@ -16,7 +16,7 @@ FetchContent_Declare(
 )
 
 
-FetchContent_MakeAvailable(minunit Thread-Pool-C)
+FetchContent_MakeAvailable(minunit Thread-Pool-C )
 include_directories(${PROJECT_SOURCE_DIR}/cmake-build-debug/_deps/thread-pool-c-src/src)
 include_directories(${PROJECT_SOURCE_DIR}/cmake-build-debug/_deps/minunit-src)
 #library
@@ -29,3 +29,7 @@ target_link_libraries(FFT ${CMAKE_THREAD_LIBS_INIT} )
 add_executable(FFTTEST fastFourierTransformTest.cpp )
 target_link_libraries(FFTTEST FFT)
 
+#temp test
+add_executable(VALARRAYTEST test.cpp)
+#temp test
+add_executable(SIMPLEFFT simplefft.cpp)

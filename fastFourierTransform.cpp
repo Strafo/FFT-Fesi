@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "fastFourierTransform.h"
 
 
@@ -20,18 +21,30 @@ Fft_Manager::~Fft_Manager(){
 }
 
 
-void Fft_Manager::fft_multithread(std::valarray<std::complex<double>> &valarray) {
-    CArray sub_arrays[n_thread];
-    future_t* future_array[n_thread];
-    size_t sub_len=valarray.size()/n_thread;//todo controllare che sia una divisione resto 0
-    start_thread_pool(threadPool); //todo check return value
-    for(int i=0;i<n_thread;i++){
-        sub_arrays[i]=valarray[std::slice(i*sub_len,sub_len,1)];
-        future_array[i]=add_job_tail(threadPool, reinterpret_cast<void *(*)(void *)>(fft), &sub_arrays[i]);
+void Fft_Manager::fft_multithread(CArray &valarray) {
+
+    future_t* future_array[2];
+    const size_t N=valarray.size();
+    if(N<=1) {
+        return ;
     }
-    for(int i=0;i<n_thread;i++){
+    assert(start_thread_pool(threadPool)==0);//todo
+
+    CArray even = valarray[std::slice(0, N/2, 2)];
+    future_array[0]=add_job_tail(threadPool, reinterpret_cast<void *(*)(void *)>(fft),&even );
+
+    CArray  odd = valarray[std::slice(1, N/2, 2)];
+    future_array[1]=add_job_tail(threadPool, reinterpret_cast<void *(*)(void *)>(fft),&odd );
+
+    for(int i=0;i<2;i++){
         get_future(future_array[i]);//todo get ret value
         destroy_future(future_array[i]);
+    }
+    for (size_t k = 0; k < N/2; ++k)
+    {
+        Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
+        valarray[k    ] = even[k] + t;
+        valarray[k+N/2] = even[k] - t;
     }
     pause_thread_pool(threadPool);
 }
