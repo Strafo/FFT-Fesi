@@ -64,9 +64,9 @@ MU_TEST(print_test){
 }
 
 MU_TEST_SUITE(simple_fft_test_suite){
-    MU_RUN_TEST(fft_test);
-    MU_RUN_TEST(ifft_test);
     MU_RUN_TEST(print_test);
+    //MU_RUN_TEST(fft_test);
+    //MU_RUN_TEST(ifft_test);
 }
 
 int main()

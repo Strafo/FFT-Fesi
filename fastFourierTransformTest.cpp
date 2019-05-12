@@ -1,13 +1,12 @@
 #include "fftTest.h"
 #include "fastFourierTransform.h"
-#define THREAD_POOL_SIZE 2
+#include <array>
 
 
 using namespace std;
 
-Fft_Manager fft_manager(THREAD_POOL_SIZE);
+Fft_Manager fft_manager=Fft_Manager();
 
-int rep=0;
 
 MU_TEST(fft_test){
     CArray *data[REPETITIONS];
@@ -17,8 +16,7 @@ MU_TEST(fft_test){
 
     gettimeofday(&t0, NULL);
     for(int i = 0; i < REPETITIONS; i++){
-        rep=i;
-        fft_manager.fft_multithread(*(data[i]));
+        fft_manager.fft(*(data[i]),(*(data[i])).size());
     }
     gettimeofday(&t1, NULL);
     print_time(t1,t0,"fft");
@@ -28,10 +26,11 @@ MU_TEST(fft_test){
 }
 
 MU_TEST(ifft_test){
+#ifndef TODO
     CArray *data[REPETITIONS];
     CArray input(TEST,inputsize);
-    fft_manager.fft_multithread(input);
-#ifndef TODO
+    fft_manager.fft(input);
+
     for (auto & j : data) {
         j=new CArray(input);
     }
@@ -50,42 +49,28 @@ MU_TEST(ifft_test){
 }
 
 MU_TEST(print_test){
-    CArray* fft_result;
-    CArray* ifft_result;
-
-    fft_result=new CArray(TEST,inputsize);
-    fft_manager.fft_multithread(*fft_result);
+    CArray fft_result= CArray(TEST,inputsize);
+    fft_manager.fft(fft_result,fft_result.size());
     std::cout << std::endl << "fft" << std::endl;
     for (int i = 0; i < inputsize; ++i)
     {
-        std::cout << fft_result->operator[](i) << std::endl;
+        std::cout << fft_result[i] << std::endl;
     }
-#ifndef TODO
-    ifft_result=fft_result;
-    ifft(*ifft_result);
+
+    //ifft
+    fft_manager.ifft(fft_result);
     std::cout << std::endl << "ifft" << std::endl;
     for (int i = 0; i < inputsize; ++i)
     {
-        std::cout << ifft_result->operator[](i) << std::endl;
+        std::cout << fft_result.operator[](i) << std::endl;
     }
-#endif
 }
-
-
-
-
-
 
 MU_TEST_SUITE(fast_fourier_transform_test_suite){
-    MU_RUN_TEST(fft_test);
-    MU_RUN_TEST(ifft_test);
     MU_RUN_TEST(print_test);
+    //MU_RUN_TEST(fft_test);
+    //MU_RUN_TEST(ifft_test);
 }
-
-
-
-
-
 
 
 

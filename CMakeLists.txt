@@ -30,6 +30,4 @@ add_executable(FFTTEST fastFourierTransformTest.cpp )
 target_link_libraries(FFTTEST FFT)
 
 #temp test
-add_executable(VALARRAYTEST test.cpp)
-#temp test
 add_executable(SIMPLEFFT simplefft.cpp)

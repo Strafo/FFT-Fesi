@@ -5,15 +5,22 @@
 #include <valarray>
 #include <threadpool.h>
 
+typedef std::complex<double> Complex;
+typedef std::valarray<Complex> CArray;
+
 class Fft_Manager
 {
-    private:
-    thread_pool_t* threadPool;
-    int n_thread;
-    public:
-    void fft_multithread(std::valarray<std::complex<double>>& valarray);
+private:
+    Complex **W= nullptr;
+    size_t WSIZE=0;
+    void init_twiddle_factor(int input_size);
+    Complex get_twiddle_factor(const int &n,const int &k);
+    void fft_aux(CArray& in,size_t n);
 
-    Fft_Manager(int threads_number);
+public:
+    void fft(CArray& input,size_t size);
+    void ifft(CArray& input);
+    Fft_Manager();
     ~Fft_Manager();
 
 
