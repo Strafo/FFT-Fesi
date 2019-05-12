@@ -1,7 +1,7 @@
 #include <iostream>
 #include "fastFourierTransform.h"
 
-/**DIF ALGO FOR FFT (decimate in frequency)**/
+/**DIT ALGO FOR FFT (decimate in time)**/
 const double PI = 3.14159265358979323846264338328L;
 const double TAU=PI*2;
 using namespace std;
