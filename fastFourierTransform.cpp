@@ -14,7 +14,6 @@ Fft_Manager::Fft_Manager() {
 }
 
 
-
 Fft_Manager::~Fft_Manager(){
     free_twiddle_factors(WSIZE,W);
 }
@@ -37,10 +36,6 @@ void Fft_Manager::init_twiddle_factor(int input_size){//todo i twiddle factor so
         }
     }
 }
-
-
-
-
 
 inline Complex Fft_Manager::get_twiddle_factor(const int &n,const int &k){
     int passo=WSIZE/n;

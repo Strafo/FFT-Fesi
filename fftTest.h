@@ -5,7 +5,7 @@
 #define FFT_FFTTEST_H
 #define PRINT_TEST
 #define REPETITIONS 1
-#define TEST sinfunction
+#define TEST test1
 #define TODO
 #include<minunit.h>
 #include <complex>
