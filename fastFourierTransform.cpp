@@ -23,15 +23,16 @@ Fft_Manager::~Fft_Manager(){
 
 void Fft_Manager::init_twiddle_factor(int input_size){//todo i twiddle factor sono tt necessari?
     double theta=TAU/(double)input_size;
+    if(input_size>WSIZE) {//aggiorno i tw factor sse quelli precedenti non erano sufficenti
+        cout<<"init tw"<<input_size<<endl;
 
-    if(input_size!=WSIZE) {//aggiorno i tw factor sse quelli precedenti non erano sufficenti
         WSIZE=input_size;
 
         if(W == nullptr){
             free_twiddle_factors(WSIZE,W);
         }
-        W = new Complex *[WSIZE];
-        for (int k = 0; k < input_size; k++) {
+        W = new Complex *[WSIZE/2];
+        for (int k = 0; k < input_size/2; k++) {
             W[k] = new Complex(cos(-theta * k), sin(-theta * k));
         }
     }
@@ -79,10 +80,14 @@ void Fft_Manager::ifft(CArray& x)
     x /= x.size();
 }
 
+void Fft_Manager::prepare_tw(size_t inputsize) {
+    init_twiddle_factor(inputsize);
+}
+
 
 void free_twiddle_factors(size_t ws,Complex **&w){
     if(w== nullptr)return;
-    for(int i=0; i<ws; ++i)
+    for(int i=0; i<ws/2; ++i)
         delete w[i];
     delete[] w;
     w= nullptr;

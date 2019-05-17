@@ -3,7 +3,6 @@
 
 #include <complex>
 #include <valarray>
-#include <threadpool.h>
 
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> CArray;
@@ -20,6 +19,7 @@ private:
 public:
     void fft(CArray& input,size_t size);
     void ifft(CArray& input);
+    void prepare_tw(size_t inputsize);
     Fft_Manager();
     ~Fft_Manager();
 

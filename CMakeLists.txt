@@ -31,3 +31,6 @@ target_link_libraries(FFTTEST FFT)
 
 #temp test
 add_executable(SIMPLEFFT simplefft.cpp)
+add_executable(TIMESFFT timeTest.cpp)
+target_link_libraries(TIMESFFT FFT)
+
