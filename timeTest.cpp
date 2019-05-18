@@ -7,13 +7,9 @@
 #include <valarray>
 #include <sys/time.h>
 #include <fstream>
-#include "fastFourierTransform.h"
+#include "fft.h"
 #define TESTNUM 15 //24
 using namespace std;
-const double PI = 3.141592653589793238460;
-
-void fft(CArray& x) ;
-void ifft(CArray& x);
 void dft(CArray& x);
 struct timeval t0,t1;
 size_t inputsize;
@@ -26,7 +22,6 @@ ofstream file;
 
 MU_TEST(fft_test){
         //fft_manager.fft(*data,inputsize);
-        //fft(*data);
         dft(*data);
 }
 
@@ -66,42 +61,14 @@ int main(){
 }
 
 
-//FFT ALGO
 
-void fft(CArray& x) {
-    const size_t N = x.size();
-    if (N <= 1) return;
-
-    // divide
-    CArray even = x[std::slice(0, N / 2, 2)];
-    CArray odd = x[std::slice(1, N / 2, 2)];
-
-    // conquer
-    fft(even);
-    fft(odd);
-
-    // combine
-    for (size_t k = 0; k < N / 2; ++k) {
-        Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
-        x[k] = even[k] + t;
-        x[k + N / 2] = even[k] - t;
-    }
-}
-
-void ifft(CArray& x)
-{
-    x = x.apply(std::conj);
-    fft( x );
-    x = x.apply(std::conj);
-    x /= x.size();
-}
 
 void dft(CArray& x){
     CArray out = CArray(x.size());
     for(int k=0;k<x.size();k++){
         out[k]=x[0];
         for(int n=1;n<x.size();n++){
-            out[k]+=x[n]*polar(1.0, -2 * PI * k*n /x.size());
+            out[k]+=x[n]*polar(1.0, -2 * 3.141592653589793238460 * k*n /x.size());
         }
     }
 }

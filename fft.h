@@ -22,8 +22,6 @@ public:
     void prepare_tw(size_t inputsize);
     Fft_Manager();
     ~Fft_Manager();
-
-
 };
 
 

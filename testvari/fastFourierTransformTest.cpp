@@ -1,5 +1,5 @@
 #include "fftTest.h"
-#include "fastFourierTransform.h"
+#include "fft.h"
 #include <array>
 
 
