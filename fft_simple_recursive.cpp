@@ -3,96 +3,29 @@
 
 /**DIT ALGO FOR FFT (decimate in time)**/
 const double PI = 3.14159265358979323846264338328L;
-const double TAU=PI*2;
 using namespace std;
+void Fft_Manager::fft_aux(CArray& x, size_t N2) {
+    const size_t N = x.size();
+    if (N <= 1) return;
 
-void free_twiddle_factors(size_t ws,Complex **&w);
+    // divide
+    CArray even = x[std::slice(0, N / 2, 2)];
+    CArray odd = x[std::slice(1, N / 2, 2)];
 
-/**CONSTRUCTOR/DESTRUCTOR**/
-Fft_Manager::Fft_Manager() {
+    // conquer
+    fft(even,0);
+    fft(odd,0);
 
-}
-
-
-Fft_Manager::~Fft_Manager(){
-    free_twiddle_factors(WSIZE,W);
-}
-
-/**IMPLEMEMENTATION**/
-
-void Fft_Manager::init_twiddle_factor(int input_size){
-    double theta=TAU/(double)input_size;
-    if(input_size>WSIZE) {//aggiorno i tw factor sse quelli precedenti non erano sufficenti
-        cout<<"init tw"<<input_size<<endl;
-
-        WSIZE=input_size;
-
-        if(W == nullptr){
-            free_twiddle_factors(WSIZE,W);
-        }
-        W = new Complex *[WSIZE/2];
-        for (int k = 0; k < input_size/2; k++) {
-            W[k] = new Complex(cos(-theta * k), sin(-theta * k));
-        }
+    // combine
+    for (size_t k = 0; k < N / 2; ++k) {
+        Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
+        x[k] = even[k] + t;
+        x[k + N / 2] = even[k] - t;
     }
 }
-
-inline Complex Fft_Manager::get_twiddle_factor(const int &n,const int &k){
-    int passo=WSIZE/n;
-    return  Complex(*W[k*passo]);
-}
-
-
-
-void Fft_Manager::fft_aux(CArray& input, size_t N) {
-
-    //caso base
-    if(N<=1)return;
-    size_t NH=N/2;
-    CArray even = input[std::slice(0, NH, 2)];
-    CArray  odd = input[std::slice(1, NH, 2)];
-
-    fft_aux(even,NH);
-    fft_aux(odd,NH);
-
-    for(size_t k=0;k<NH;k++){
-        Complex t=get_twiddle_factor(N,k)*odd[k];
-        input[k]=even[k]+t;
-        input[k+NH]=even[k]-t;
-    }
-
-
-}
-
-
-void fft_aux(CArray& input, size_t N) {
-
-    //caso base
-    if(N<=1)return;
-    size_t NH=N/2;
-    CArray even = input[std::slice(0, NH, 2)];
-    CArray  odd = input[std::slice(1, NH, 2)];
-
-    fft_aux(even,NH);
-    fft_aux(odd,NH);
-
-    for(size_t k=0;k<NH;k++){
-        Complex t=get_twiddle_factor(N,k)*odd[k];
-        input[k]=even[k]+t;
-        input[k+NH]=even[k]-t;
-    }
-
-
-}
-
-
 void Fft_Manager::fft(CArray& input, size_t size) {
-    init_twiddle_factor(size);
     fft_aux(input,size);
-
 }
-
-
 void Fft_Manager::ifft(CArray& x)
 {
     x = x.apply(std::conj);
@@ -101,15 +34,31 @@ void Fft_Manager::ifft(CArray& x)
     x /= x.size();
 }
 
+
+
+
+
+
+
+
 void Fft_Manager::prepare_tw(size_t inputsize) {
-    init_twiddle_factor(inputsize);
 }
 
 
-void free_twiddle_factors(size_t ws,Complex **&w){
-    if(w== nullptr)return;
-    for(int i=0; i<ws/2; ++i)
-        delete w[i];
-    delete[] w;
-    w= nullptr;
+
+/**CONSTRUCTOR/DESTRUCTOR**/
+Fft_Manager::Fft_Manager() {
+
+}
+
+
+Fft_Manager::~Fft_Manager(){
+}
+
+/**IMPLEMEMENTATION**/
+
+void Fft_Manager::init_twiddle_factor(int input_size){
+}
+
+inline Complex Fft_Manager::get_twiddle_factor(const int &n,const int &k){
 }

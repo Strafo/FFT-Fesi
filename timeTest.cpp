@@ -8,26 +8,19 @@
 #include <sys/time.h>
 #include <fstream>
 #include "fft.h"
-#define TESTNUM 15 //24
+#define TESTNUM 26
 using namespace std;
 void dft(CArray& x);
 struct timeval t0,t1;
 size_t inputsize;
 int *array;
 Fft_Manager fft_manager=Fft_Manager();
-CArray *data;
-ofstream file;
-
-
+CArray *data;ofstream file;
 
 MU_TEST(fft_test){
-        //fft_manager.fft(*data,inputsize);
-        dft(*data);
+        fft_manager.fft(*data,inputsize);
+        //dft(*data);
 }
-
-
-
-
 MU_TEST_SUITE(fast_fourier_transform_test_suite){
         for (int i=TESTNUM-1;i>0;i--){
             inputsize=pow(2,i);
@@ -45,9 +38,6 @@ MU_TEST_SUITE(fast_fourier_transform_test_suite){
             delete data;
         }
 }
-
-
-
 int main(){
     file.open("times.txt");
     MU_RUN_TEST(fast_fourier_transform_test_suite);
@@ -59,9 +49,6 @@ int main(){
     file.close();
     return minunit_status;
 }
-
-
-
 
 void dft(CArray& x){
     CArray out = CArray(x.size());

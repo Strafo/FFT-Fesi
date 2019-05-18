@@ -1,9 +1,7 @@
 #ifndef FAST_FOURIER_TRANSFORM_LIBRARY_H
 #define FAST_FOURIER_TRANSFORM_LIBRARY_H
-
 #include <complex>
 #include <valarray>
-
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> CArray;
 
@@ -23,6 +21,9 @@ public:
     Fft_Manager();
     ~Fft_Manager();
 };
-
-
 #endif
+
+
+
+
+

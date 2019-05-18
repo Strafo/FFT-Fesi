@@ -1,25 +1,18 @@
 #include <iostream>
 #include "fft.h"
-
 /**DIT ALGO FOR FFT (decimate in time)**/
 const double PI = 3.14159265358979323846264338328L;
 const double TAU=PI*2;
 using namespace std;
-
 void free_twiddle_factors(size_t ws,Complex **&w);
-
 /**CONSTRUCTOR/DESTRUCTOR**/
 Fft_Manager::Fft_Manager() {
 
 }
-
-
 Fft_Manager::~Fft_Manager(){
     free_twiddle_factors(WSIZE,W);
 }
-
 /**IMPLEMEMENTATION**/
-
 void Fft_Manager::init_twiddle_factor(int input_size){
     double theta=TAU/(double)input_size;
     if(input_size>WSIZE) {//aggiorno i tw factor sse quelli precedenti non erano sufficenti
@@ -36,16 +29,12 @@ void Fft_Manager::init_twiddle_factor(int input_size){
         }
     }
 }
-
 inline Complex Fft_Manager::get_twiddle_factor(const int &n,const int &k){
     int passo=WSIZE/n;
     return  Complex(*W[k*passo]);
 }
 
-
-
 void Fft_Manager::fft_aux(CArray& input, size_t N) {
-
     //caso base
     if(N<=1)return;
     size_t NH=N/2;
@@ -60,17 +49,12 @@ void Fft_Manager::fft_aux(CArray& input, size_t N) {
         input[k]=even[k]+t;
         input[k+NH]=even[k]-t;
     }
-
-
 }
-
 void Fft_Manager::fft(CArray& input, size_t size) {
     init_twiddle_factor(size);
     fft_aux(input,size);
 
 }
-
-
 void Fft_Manager::ifft(CArray& x)
 {
     x = x.apply(std::conj);
@@ -78,12 +62,9 @@ void Fft_Manager::ifft(CArray& x)
     x = x.apply(std::conj);
     x /= x.size();
 }
-
 void Fft_Manager::prepare_tw(size_t inputsize) {
     init_twiddle_factor(inputsize);
 }
-
-
 void free_twiddle_factors(size_t ws,Complex **&w){
     if(w== nullptr)return;
     for(int i=0; i<ws/2; ++i)
