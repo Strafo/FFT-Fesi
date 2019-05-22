@@ -31,6 +31,7 @@ void Fft_Manager::init_twiddle_factor(int input_size){
 }
 inline Complex Fft_Manager::get_twiddle_factor(const int &n,const int &k){
     int passo=WSIZE/n;
+
     return  Complex(*W[k*passo]);
 }
 
