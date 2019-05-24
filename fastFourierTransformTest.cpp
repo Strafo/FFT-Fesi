@@ -7,47 +7,6 @@ using namespace std;
 
 Fft_Manager fft_manager=Fft_Manager();
 
-
-MU_TEST(fft_test){
-    CArray *data[REPETITIONS];
-    for (auto & j : data) {
-        j=new CArray(TEST,inputsize);
-    }
-
-    gettimeofday(&t0, NULL);
-    for(int i = 0; i < REPETITIONS; i++){
-        fft_manager.fft(*(data[i]),(*(data[i])).size());
-    }
-    gettimeofday(&t1, NULL);
-    print_time(t1,t0,"fft");
-    for (auto & j : data) {
-        delete j;
-    }
-}
-
-MU_TEST(ifft_test){
-#ifndef TODO
-    CArray *data[REPETITIONS];
-    CArray input(TEST,inputsize);
-    fft_manager.fft(input);
-
-    for (auto & j : data) {
-        j=new CArray(input);
-    }
-
-    gettimeofday(&t0, NULL);
-    for(int i = 0; i < REPETITIONS; i++){
-        ifft(*data[i]);
-    }
-    gettimeofday(&t1, NULL);
-    print_time(t1,t0,"ifft");
-
-    for (auto & j : data) {
-        delete j;
-    }
-#endif
-}
-
 MU_TEST(print_test){
     CArray fft_result= CArray(TEST,inputsize);
     fft_manager.fft(fft_result,fft_result.size());
@@ -68,8 +27,6 @@ MU_TEST(print_test){
 
 MU_TEST_SUITE(fast_fourier_transform_test_suite){
     MU_RUN_TEST(print_test);
-    //MU_RUN_TEST(fft_test);
-    //MU_RUN_TEST(ifft_test);
 }
 
 
@@ -81,3 +38,19 @@ int main(){
     MU_REPORT();
     return minunit_status;
 }
+
+
+
+
+/*
+MU_TEST(fft_test){
+    CArray data(TEST,inputsize);
+    fft_manager.fft(*(data[i]),(*(data[i])).size());
+}
+
+MU_TEST(ifft_test){
+    CArray input(TEST,inputsize);
+    fft_manager.fft(input);
+    fft_manager.ifft(input);
+}
+*/

@@ -30,3 +30,5 @@ target_link_libraries(TIME_FFT_RECURSIVE_PRECOMP_W  FFT_RECURSIVE_PRECOMP_TW)
 #target_link_libraries(TIME_FFT_RECURSIVE_SIMPLE  FFT_RECURSIVE_SIMPLE)
 
 
+add_executable(TEST_FFT fastFourierTransformTest.cpp fftTest.h)
+target_link_libraries(TEST_FFT  FFT_RECURSIVE_PRECOMP_TW)
